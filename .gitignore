@@ -35,9 +35,23 @@ build/
 ### Environment variables ###
 .env
 .env.local
+.env.*
+
+### Google Cloud Service Account Keys ###
+*-*-*.json
+*service-account*.json
+*credentials*.json
+glossy-ally-*-*.json
 
 ### Docker ###
 *.log
 
+### Cloud SQL Proxy ###
+cloud-sql-proxy*
+cloud-sql-proxy.exe
+cloud-sql-proxy.darwin
+cloud-sql-proxy.linux
+cloud-sql-proxy.windows.exe
+
 /fase-4/
-/scripts/
+scripts/init-db.sql

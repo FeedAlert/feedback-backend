@@ -5,22 +5,27 @@ import com.example.feedAlert.application.dto.FeedbackResponse;
 import com.example.feedAlert.application.usecase.CreateFeedbackUseCase;
 import com.example.feedAlert.application.usecase.GetFeedbackUseCase;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/feedbacks")
-@RequiredArgsConstructor
 public class FeedbackController {
 
+    private static final Logger log = LoggerFactory.getLogger(FeedbackController.class);
+    
     private final CreateFeedbackUseCase createFeedbackUseCase;
     private final GetFeedbackUseCase getFeedbackUseCase;
+
+    public FeedbackController(CreateFeedbackUseCase createFeedbackUseCase, GetFeedbackUseCase getFeedbackUseCase) {
+        this.createFeedbackUseCase = createFeedbackUseCase;
+        this.getFeedbackUseCase = getFeedbackUseCase;
+    }
 
     @PostMapping
     public ResponseEntity<FeedbackResponse> createFeedback(
@@ -63,4 +68,3 @@ public class FeedbackController {
         return ResponseEntity.ok(responses);
     }
 }
-

@@ -1,19 +1,9 @@
 package com.example.feedAlert.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tb_role")
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +15,68 @@ public class RoleEntity {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-}
 
+    public RoleEntity() {
+    }
+
+    public RoleEntity(Long roleId, String name, String description) {
+        this.roleId = roleId;
+        this.name = name;
+        this.description = description;
+    }
+
+    // Getters and Setters
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // Builder pattern
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private Long roleId;
+        private String name;
+        private String description;
+
+        public Builder roleId(Long roleId) {
+            this.roleId = roleId;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public RoleEntity build() {
+            return new RoleEntity(roleId, name, description);
+        }
+    }
+}

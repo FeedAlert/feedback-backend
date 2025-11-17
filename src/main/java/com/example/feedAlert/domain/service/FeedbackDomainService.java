@@ -1,14 +1,14 @@
 package com.example.feedAlert.domain.service;
 
 import com.example.feedAlert.domain.model.Feedback;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class FeedbackDomainService {
+
+    private static final Logger log = LoggerFactory.getLogger(FeedbackDomainService.class);
 
     public boolean shouldNotifyAdmins(Feedback feedback) {
         if (feedback == null) {
@@ -32,4 +32,3 @@ public class FeedbackDomainService {
         }
     }
 }
-

@@ -5,7 +5,6 @@ import com.example.feedAlert.domain.model.Feedback;
 import com.example.feedAlert.infrastructure.persistence.entity.FeedbackEntity;
 import com.example.feedAlert.infrastructure.persistence.jpa.JpaFeedbackRepository;
 import com.example.feedAlert.infrastructure.persistence.mapper.FeedbackEntityMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -13,11 +12,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 public class FeedbackRepositoryImpl implements FeedbackRepository {
 
     private final JpaFeedbackRepository jpaRepository;
     private final FeedbackEntityMapper mapper;
+
+    public FeedbackRepositoryImpl(JpaFeedbackRepository jpaRepository, FeedbackEntityMapper mapper) {
+        this.jpaRepository = jpaRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public Feedback save(Feedback feedback) {

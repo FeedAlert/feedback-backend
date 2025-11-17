@@ -2,20 +2,24 @@ package com.example.feedAlert.presentation.controller;
 
 import com.example.feedAlert.application.dto.CourseResponse;
 import com.example.feedAlert.application.usecase.GetCourseUseCase;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/courses")
-@RequiredArgsConstructor
 public class CourseController {
 
+    private static final Logger log = LoggerFactory.getLogger(CourseController.class);
+    
     private final GetCourseUseCase getCourseUseCase;
+
+    public CourseController(GetCourseUseCase getCourseUseCase) {
+        this.getCourseUseCase = getCourseUseCase;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<CourseResponse> getCourse(@PathVariable Long id) {
@@ -29,4 +33,3 @@ public class CourseController {
         return ResponseEntity.ok(responses);
     }
 }
-

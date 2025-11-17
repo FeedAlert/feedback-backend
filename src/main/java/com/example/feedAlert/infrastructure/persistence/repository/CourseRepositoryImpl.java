@@ -5,18 +5,21 @@ import com.example.feedAlert.domain.model.Course;
 import com.example.feedAlert.infrastructure.persistence.entity.CourseEntity;
 import com.example.feedAlert.infrastructure.persistence.jpa.JpaCourseRepository;
 import com.example.feedAlert.infrastructure.persistence.mapper.FeedbackEntityMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 public class CourseRepositoryImpl implements CourseRepository {
 
     private final JpaCourseRepository jpaRepository;
     private final FeedbackEntityMapper mapper;
+
+    public CourseRepositoryImpl(JpaCourseRepository jpaRepository, FeedbackEntityMapper mapper) {
+        this.jpaRepository = jpaRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public Course save(Course course) {

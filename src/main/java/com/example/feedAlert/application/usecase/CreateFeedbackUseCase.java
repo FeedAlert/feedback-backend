@@ -11,24 +11,35 @@ import com.example.feedAlert.domain.model.Course;
 import com.example.feedAlert.domain.model.Feedback;
 import com.example.feedAlert.domain.model.User;
 import com.example.feedAlert.domain.service.FeedbackDomainService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class CreateFeedbackUseCase {
 
+    private static final Logger log = LoggerFactory.getLogger(CreateFeedbackUseCase.class);
+    
     private final FeedbackRepository feedbackRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
     private final PubSubGateway pubSubGateway;
     private final FeedbackDomainService feedbackDomainService;
     private final FeedbackMapper feedbackMapper;
+
+    public CreateFeedbackUseCase(FeedbackRepository feedbackRepository, CourseRepository courseRepository,
+                                 UserRepository userRepository, PubSubGateway pubSubGateway,
+                                 FeedbackDomainService feedbackDomainService, FeedbackMapper feedbackMapper) {
+        this.feedbackRepository = feedbackRepository;
+        this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
+        this.pubSubGateway = pubSubGateway;
+        this.feedbackDomainService = feedbackDomainService;
+        this.feedbackMapper = feedbackMapper;
+    }
 
     @Transactional
     public FeedbackResponse execute(CreateFeedbackRequest request, Long userId) {
@@ -68,4 +79,3 @@ public class CreateFeedbackUseCase {
         return feedbackMapper.toResponse(savedFeedback);
     }
 }
-

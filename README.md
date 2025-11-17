@@ -45,7 +45,9 @@ O projeto segue uma arquitetura em camadas seguindo os princípios de DDD:
 
 ## 🔧 Configuração e Execução
 
-### 1. Iniciar Banco de Dados e Pub/Sub Emulator
+### Ambiente Local (Docker Compose)
+
+#### 1. Iniciar Banco de Dados e Pub/Sub Emulator
 
 ```bash
 docker-compose up -d
@@ -55,7 +57,7 @@ Isso irá iniciar:
 - PostgreSQL na porta `5432`
 - Pub/Sub Emulator na porta `8085`
 
-### 2. Executar a Aplicação
+#### 2. Executar a Aplicação
 
 ```bash
 mvn spring-boot:run
@@ -63,7 +65,84 @@ mvn spring-boot:run
 
 A aplicação estará disponível em: `http://localhost:8080`
 
-### 3. Verificar Saúde da Aplicação
+### Ambiente Cloud SQL (Produção/Desenvolvimento)
+
+⚠️ **IMPORTANTE**: O banco Cloud SQL está configurado para aceitar conexões apenas via Cloud SQL Proxy por segurança.
+
+#### 1. Baixar Cloud SQL Proxy
+
+**macOS (ARM64):**
+```bash
+curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.8.0/cloud-sql-proxy.darwin.arm64
+chmod +x cloud-sql-proxy
+```
+
+**macOS (Intel):**
+```bash
+curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.8.0/cloud-sql-proxy.darwin.amd64
+chmod +x cloud-sql-proxy
+```
+
+**Windows:**
+```powershell
+# Baixe de: https://github.com/GoogleCloudPlatform/cloud-sql-proxy/releases
+# Ou via PowerShell:
+Invoke-WebRequest -Uri "https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.8.0/cloud-sql-proxy.windows.amd64.exe" -OutFile "cloud-sql-proxy.exe"
+```
+
+Mais opções: https://cloud.google.com/sql/docs/mysql/sql-proxy?hl=pt-br#install
+
+#### 2. Obter Credenciais da Service Account
+
+O arquivo JSON da service account (`glossy-ally-476722-p5-46a7447b9399.json`) deve estar na raiz do projeto.
+
+⚠️ **NUNCA commite este arquivo no Git!** Ele já está no `.gitignore`.
+
+#### 3. Iniciar Cloud SQL Proxy
+
+**Linux/macOS:**
+```bash
+./scripts/start-cloud-sql-proxy.sh
+```
+
+**Windows:**
+```cmd
+scripts\start-cloud-sql-proxy.bat
+```
+
+**Ou manualmente:**
+```bash
+./cloud-sql-proxy --credentials-file=./glossy-ally-476722-p5-46a7447b9399.json glossy-ally-476722-p5:us-central1:feedalert-db
+```
+
+⚠️ **Mantenha o terminal do proxy aberto** enquanto a aplicação estiver rodando.
+
+#### 4. Configurar Variáveis de Ambiente
+
+Crie um arquivo `.env.local` na raiz do projeto (ou exporte as variáveis):
+
+```bash
+export SPRING_DATASOURCE_URL='jdbc:postgresql://127.0.0.1:5432/feedalert_db'
+export SPRING_DATASOURCE_USERNAME='postgres'
+export SPRING_DATASOURCE_PASSWORD='Uq$(t16uI8=~VO8#'
+```
+
+**No Windows (PowerShell):**
+```powershell
+$env:SPRING_DATASOURCE_URL="jdbc:postgresql://127.0.0.1:5432/feedalert_db"
+$env:SPRING_DATASOURCE_USERNAME="postgres"
+$env:SPRING_DATASOURCE_PASSWORD="Uq$(t16uI8=~VO8#"
+```
+
+#### 5. Executar a Aplicação
+
+```bash
+mvn spring-boot:run
+```
+
+A aplicação se conectará ao Cloud SQL através do proxy em `127.0.0.1:5432`.
+
+### Verificar Saúde da Aplicação
 
 ```bash
 curl http://localhost:8080/actuator/health
@@ -138,7 +217,18 @@ O formato do evento segue o especificado na documentação:
 
 ## 🗄️ Banco de Dados
 
-O banco de dados é criado automaticamente via Docker Compose com as seguintes tabelas:
+### Migrações (Flyway)
+
+O projeto utiliza **Flyway** para gerenciar migrações do banco de dados. As migrations estão em `src/main/resources/db/migration/`:
+
+- `V1__Create_Schema.sql` - Criação das tabelas
+- `V2__Insert_initial_data.sql` - Dados iniciais (seed)
+
+As migrações são executadas automaticamente na inicialização da aplicação.
+
+### Estrutura do Banco
+
+O banco de dados possui as seguintes tabelas:
 
 - `tb_role` - Roles de usuários (STUDENT, ADMIN)
 - `tb_user` - Usuários do sistema

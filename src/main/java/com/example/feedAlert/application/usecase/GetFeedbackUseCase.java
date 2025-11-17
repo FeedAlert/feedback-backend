@@ -4,19 +4,24 @@ import com.example.feedAlert.application.dto.FeedbackResponse;
 import com.example.feedAlert.application.mapper.FeedbackMapper;
 import com.example.feedAlert.domain.gateway.FeedbackRepository;
 import com.example.feedAlert.domain.model.Feedback;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class GetFeedbackUseCase {
 
+    private static final Logger log = LoggerFactory.getLogger(GetFeedbackUseCase.class);
+    
     private final FeedbackRepository feedbackRepository;
     private final FeedbackMapper feedbackMapper;
+
+    public GetFeedbackUseCase(FeedbackRepository feedbackRepository, FeedbackMapper feedbackMapper) {
+        this.feedbackRepository = feedbackRepository;
+        this.feedbackMapper = feedbackMapper;
+    }
 
     public FeedbackResponse findById(Long feedbackId) {
         log.info("Finding feedback by ID: {}", feedbackId);
@@ -53,4 +58,3 @@ public class GetFeedbackUseCase {
             .toList();
     }
 }
-

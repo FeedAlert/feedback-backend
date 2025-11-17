@@ -5,18 +5,21 @@ import com.example.feedAlert.domain.model.User;
 import com.example.feedAlert.infrastructure.persistence.entity.UserEntity;
 import com.example.feedAlert.infrastructure.persistence.jpa.JpaUserRepository;
 import com.example.feedAlert.infrastructure.persistence.mapper.FeedbackEntityMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaRepository;
     private final FeedbackEntityMapper mapper;
+
+    public UserRepositoryImpl(JpaUserRepository jpaRepository, FeedbackEntityMapper mapper) {
+        this.jpaRepository = jpaRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public User save(User user) {

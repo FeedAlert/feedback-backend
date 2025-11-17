@@ -4,19 +4,24 @@ import com.example.feedAlert.application.dto.CourseResponse;
 import com.example.feedAlert.application.mapper.CourseMapper;
 import com.example.feedAlert.domain.gateway.CourseRepository;
 import com.example.feedAlert.domain.model.Course;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class GetCourseUseCase {
 
+    private static final Logger log = LoggerFactory.getLogger(GetCourseUseCase.class);
+    
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+
+    public GetCourseUseCase(CourseRepository courseRepository, CourseMapper courseMapper) {
+        this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
+    }
 
     public CourseResponse findById(Long courseId) {
         log.info("Finding course by ID: {}", courseId);
@@ -32,4 +37,3 @@ public class GetCourseUseCase {
             .toList();
     }
 }
-
