@@ -25,7 +25,6 @@ public class CourseRepositoryImpl implements CourseRepository {
     public Course save(Course course) {
         CourseEntity entity = mapper.toCourseEntity(course);
         CourseEntity saved = jpaRepository.save(entity);
-        // Recarregar após salvar
         return jpaRepository.findById(saved.getCourseId())
             .map(mapper::toCourseDomain)
             .orElseThrow(() -> new RuntimeException("Failed to save course"));

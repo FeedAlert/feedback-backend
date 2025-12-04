@@ -26,7 +26,6 @@ public class Feedback {
         this.createdAt = createdAt;
     }
 
-    // Getters
     public Long getFeedbackId() {
         return feedbackId;
     }
@@ -55,7 +54,6 @@ public class Feedback {
         return createdAt;
     }
 
-    // Setters
     public void setFeedbackId(Long feedbackId) {
         this.feedbackId = feedbackId;
     }
@@ -84,7 +82,6 @@ public class Feedback {
         this.createdAt = createdAt;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }
@@ -138,7 +135,6 @@ public class Feedback {
         }
     }
 
-    // Value Object para Rating
     public record Rating(Integer value) {
         private static final int MIN_RATING = 1;
         private static final int MAX_RATING = 5;
@@ -155,7 +151,6 @@ public class Feedback {
         }
     }
 
-    // Domain logic
     public boolean requiresUrgentNotification() {
         return isUrgent;
     }

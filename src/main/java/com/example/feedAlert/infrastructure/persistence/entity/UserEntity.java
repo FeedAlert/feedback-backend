@@ -41,7 +41,6 @@ public class UserEntity {
         createdAt = Instant.now();
     }
 
-    // Getters and Setters
     public Long getUserId() {
         return userId;
     }
@@ -82,7 +81,6 @@ public class UserEntity {
         this.createdAt = createdAt;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }

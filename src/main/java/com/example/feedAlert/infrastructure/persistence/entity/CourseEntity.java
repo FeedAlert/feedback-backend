@@ -36,7 +36,6 @@ public class CourseEntity {
         createdAt = Instant.now();
     }
 
-    // Getters and Setters
     public Long getCourseId() {
         return courseId;
     }
@@ -69,7 +68,6 @@ public class CourseEntity {
         this.createdAt = createdAt;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }

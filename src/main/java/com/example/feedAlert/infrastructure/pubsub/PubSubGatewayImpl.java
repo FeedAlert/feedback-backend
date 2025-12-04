@@ -7,12 +7,14 @@ import com.google.cloud.spring.pubsub.core.PubSubTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Component
+@ConditionalOnProperty(name = "app.notification.mode", havingValue = "pubsub", matchIfMissing = true)
 public class PubSubGatewayImpl implements PubSubGateway {
 
     private static final Logger log = LoggerFactory.getLogger(PubSubGatewayImpl.class);
@@ -31,7 +33,6 @@ public class PubSubGatewayImpl implements PubSubGateway {
     @Override
     public void publishFeedbackEvent(Feedback feedback) {
         try {
-            // Criar payload conforme especificação
             FeedbackEventPayload payload = FeedbackEventPayload.builder()
                 .rating(feedback.getRating() != null ? feedback.getRating().value() : null)
                 .comment(feedback.getComment())
@@ -51,7 +52,6 @@ public class PubSubGatewayImpl implements PubSubGateway {
             String jsonPayload = objectMapper.writeValueAsString(payload);
             log.info("Publishing feedback event to topic {}: {}", topicName, jsonPayload);
 
-            // Publicar no Pub/Sub usando Spring Cloud GCP
             pubSubTemplate.publish(topicName, jsonPayload, 
                 java.util.Map.of("messageId", UUID.randomUUID().toString()));
             
@@ -62,12 +62,16 @@ public class PubSubGatewayImpl implements PubSubGateway {
         }
     }
 
-    // DTOs para payload do Pub/Sub
     static class FeedbackEventPayload {
         private Integer rating;
         private String comment;
-        private Boolean isUrgent;
+        
+        @com.fasterxml.jackson.annotation.JsonProperty("isUrgent")
+        private boolean isUrgent;
+        
+        @com.fasterxml.jackson.annotation.JsonProperty("createdAt")
         private Instant createdAt;
+        
         private StudentPayload student;
         private CoursePayload course;
 
@@ -75,8 +79,8 @@ public class PubSubGatewayImpl implements PubSubGateway {
         public void setRating(Integer rating) { this.rating = rating; }
         public String getComment() { return comment; }
         public void setComment(String comment) { this.comment = comment; }
-        public Boolean getIsUrgent() { return isUrgent; }
-        public void setIsUrgent(Boolean isUrgent) { this.isUrgent = isUrgent; }
+        public boolean isUrgent() { return isUrgent; }
+        public void setUrgent(boolean isUrgent) { this.isUrgent = isUrgent; }
         public Instant getCreatedAt() { return createdAt; }
         public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
         public StudentPayload getStudent() { return student; }
@@ -91,7 +95,7 @@ public class PubSubGatewayImpl implements PubSubGateway {
             
             public Builder rating(Integer rating) { payload.rating = rating; return this; }
             public Builder comment(String comment) { payload.comment = comment; return this; }
-            public Builder isUrgent(Boolean isUrgent) { payload.isUrgent = isUrgent; return this; }
+            public Builder isUrgent(boolean isUrgent) { payload.isUrgent = isUrgent; return this; }
             public Builder createdAt(Instant createdAt) { payload.createdAt = createdAt; return this; }
             public Builder student(StudentPayload student) { payload.student = student; return this; }
             public Builder course(CoursePayload course) { payload.course = course; return this; }

@@ -17,7 +17,6 @@ public class Role {
         this.description = description;
     }
 
-    // Getters
     public Long getRoleId() {
         return roleId;
     }
@@ -30,7 +29,6 @@ public class Role {
         return description;
     }
 
-    // Setters
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
@@ -43,7 +41,6 @@ public class Role {
         this.description = description;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }

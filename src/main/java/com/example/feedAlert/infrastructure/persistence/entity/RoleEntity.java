@@ -25,7 +25,6 @@ public class RoleEntity {
         this.description = description;
     }
 
-    // Getters and Setters
     public Long getRoleId() {
         return roleId;
     }
@@ -50,7 +49,6 @@ public class RoleEntity {
         this.description = description;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }

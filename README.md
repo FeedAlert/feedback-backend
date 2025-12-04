@@ -45,22 +45,63 @@ O projeto segue uma arquitetura em camadas seguindo os princípios de DDD:
 
 ## 🔧 Configuração e Execução
 
+### Profiles de Ambiente
+
+O projeto suporta dois profiles principais, ambos usando Pub/Sub GCP:
+
+#### **Development (dev)** - Padrão
+- Conecta com Pub/Sub real do GCP (mesmo ambiente de produção)
+- Porta do backend: `8080`
+- Logging mais verboso (DEBUG)
+- Configuração: `application-dev.properties`
+- Requer variável de ambiente: `GCP_PROJECT_ID`
+
+#### **Production (prod)**
+- Conecta com Pub/Sub real do GCP
+- Porta padrão do Spring Boot: `8080`
+- Logging menos verboso (INFO/WARN)
+- Configuração: `application-prod.properties`
+- Requer variável de ambiente: `GCP_PROJECT_ID`
+
+**Como usar:**
+```bash
+# Development (padrão)
+export GCP_PROJECT_ID=seu-project-id
+mvn spring-boot:run
+
+# Ou explicitamente
+export GCP_PROJECT_ID=seu-project-id
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Production
+export SPRING_PROFILES_ACTIVE=prod
+export GCP_PROJECT_ID=seu-project-id
+mvn spring-boot:run
+```
+
 ### Ambiente Local (Docker Compose)
 
-#### 1. Iniciar Banco de Dados e Pub/Sub Emulator
+#### 1. Iniciar Banco de Dados
 
 ```bash
-docker-compose up -d
+cd feedback-backend
+docker-compose up -d postgres
 ```
 
 Isso irá iniciar:
 - PostgreSQL na porta `5432`
-- Pub/Sub Emulator na porta `8085`
 
-#### 2. Executar a Aplicação
+**⚠️ Importante**: Tanto dev quanto prod usam Pub/Sub real do GCP. Certifique-se de ter:
+- O tópico `feedback-events` criado no Pub/Sub
+- A `feedback-notification-function` deployada no GCP
+- A variável de ambiente `GCP_PROJECT_ID` configurada
+
+#### 2. Executar o Backend
 
 ```bash
-mvn spring-boot:run
+export GCP_PROJECT_ID=seu-project-id
+cd feedback-backend
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 A aplicação estará disponível em: `http://localhost:8080`
@@ -193,7 +234,7 @@ GET /api/courses/{id}
 
 ## 🔔 Integração com Pub/Sub
 
-Quando um feedback é marcado como **urgente** (`isUrgent: true`), o sistema publica automaticamente um evento no tópico `feedback-events` do Pub/Sub, que é processado pela função serverless de notificação (já implementada).
+Quando um feedback é marcado como **urgente** (`isUrgent: true`), o sistema publica automaticamente um evento no tópico `feedback-events` do Pub/Sub do GCP, que é processado pela função serverless de notificação deployada no GCP.
 
 O formato do evento segue o especificado na documentação:
 
@@ -242,7 +283,7 @@ O script de inicialização (`scripts/init-db.sql`) cria:
 - Usuário admin padrão: `admin@example.com`
 - 3 cursos de exemplo
 
-## 🧪 Desenvolvimento Local
+## 🧪 Configuração de Ambiente
 
 ### Variáveis de Ambiente
 
@@ -254,9 +295,8 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/feedback_db
 spring.datasource.username=feedback_user
 spring.datasource.password=feedback_password
 
-# Pub/Sub (para desenvolvimento local)
-spring.cloud.gcp.pubsub.project-id=local-project
-spring.cloud.gcp.pubsub.emulator-host=localhost:8085
+# Google Cloud Pub/Sub (obrigatório para dev e prod)
+GCP_PROJECT_ID=seu-project-id
 ```
 
 ### Build

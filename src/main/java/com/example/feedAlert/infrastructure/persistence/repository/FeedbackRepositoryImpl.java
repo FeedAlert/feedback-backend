@@ -26,7 +26,6 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
     public Feedback save(Feedback feedback) {
         FeedbackEntity entity = mapper.toEntity(feedback);
         FeedbackEntity saved = jpaRepository.save(entity);
-        // Recarregar com relacionamentos
         return jpaRepository.findById(saved.getFeedbackId())
             .map(mapper::toDomain)
             .orElseThrow(() -> new RuntimeException("Failed to save feedback"));

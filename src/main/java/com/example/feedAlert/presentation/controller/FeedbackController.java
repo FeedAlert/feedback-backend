@@ -32,9 +32,8 @@ public class FeedbackController {
             @Valid @RequestBody CreateFeedbackRequest request,
             @RequestHeader(value = "X-User-Id", required = false) Long userId) {
         
-        // TODO: Extrair userId do token JWT em produção
         if (userId == null) {
-            userId = 1L; // Default para desenvolvimento
+            userId = 1L;
         }
         
         FeedbackResponse response = createFeedbackUseCase.execute(request, userId);

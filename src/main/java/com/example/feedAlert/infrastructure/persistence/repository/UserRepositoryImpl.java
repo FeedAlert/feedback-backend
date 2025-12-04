@@ -25,7 +25,6 @@ public class UserRepositoryImpl implements UserRepository {
     public User save(User user) {
         UserEntity entity = mapper.toUserEntity(user);
         UserEntity saved = jpaRepository.save(entity);
-        // Recarregar com relacionamentos
         return jpaRepository.findById(saved.getUserId())
             .flatMap(u -> jpaRepository.findByEmail(u.getEmail()))
             .map(mapper::toUserDomain)

@@ -18,7 +18,6 @@ public class Course {
         this.createdAt = createdAt;
     }
 
-    // Getters
     public Long getCourseId() {
         return courseId;
     }
@@ -35,7 +34,6 @@ public class Course {
         return createdAt;
     }
 
-    // Setters
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
@@ -52,7 +50,6 @@ public class Course {
         this.createdAt = createdAt;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }

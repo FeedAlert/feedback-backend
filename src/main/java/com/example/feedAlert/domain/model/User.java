@@ -20,7 +20,6 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    // Getters
     public Long getUserId() {
         return userId;
     }
@@ -41,7 +40,6 @@ public class User {
         return createdAt;
     }
 
-    // Setters
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -62,7 +60,6 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }
@@ -104,7 +101,6 @@ public class User {
         }
     }
 
-    // Value Objects
     public record Name(String value) {
         public Name {
             if (value == null || value.isBlank()) {

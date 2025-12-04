@@ -56,7 +56,6 @@ public class FeedbackEntity {
         }
     }
 
-    // Getters and Setters
     public Long getFeedbackId() {
         return feedbackId;
     }
@@ -113,7 +112,6 @@ public class FeedbackEntity {
         this.createdAt = createdAt;
     }
 
-    // Builder pattern
     public static Builder builder() {
         return new Builder();
     }
