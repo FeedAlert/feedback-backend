@@ -6,16 +6,18 @@ public class User {
     private Long userId;
     private Name name;
     private Email email;
+    private Password password;
     private Role role;
     private Instant createdAt;
 
     public User() {
     }
 
-    public User(Long userId, Name name, Email email, Role role, Instant createdAt) {
+    public User(Long userId, Name name, Email email, Password password, Role role, Instant createdAt) {
         this.userId = userId;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.role = role;
         this.createdAt = createdAt;
     }
@@ -30,6 +32,10 @@ public class User {
 
     public Email getEmail() {
         return email;
+    }
+
+    public Password getPassword() {
+        return password;
     }
 
     public Role getRole() {
@@ -52,6 +58,10 @@ public class User {
         this.email = email;
     }
 
+    public void setPassword(Password password) {
+        this.password = password;
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
@@ -68,6 +78,7 @@ public class User {
         private Long userId;
         private Name name;
         private Email email;
+        private Password password;
         private Role role;
         private Instant createdAt;
 
@@ -86,6 +97,11 @@ public class User {
             return this;
         }
 
+        public Builder password(Password password) {
+            this.password = password;
+            return this;
+        }
+
         public Builder role(Role role) {
             this.role = role;
             return this;
@@ -97,7 +113,7 @@ public class User {
         }
 
         public User build() {
-            return new User(userId, name, email, role, createdAt);
+            return new User(userId, name, email, password, role, createdAt);
         }
     }
 
@@ -116,6 +132,14 @@ public class User {
             }
             if (!value.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
                 throw new IllegalArgumentException("Email format is invalid");
+            }
+        }
+    }
+
+    public record Password(String value) {
+        public Password {
+            if (value == null || value.isBlank()) {
+                throw new IllegalArgumentException("Password cannot be null or blank");
             }
         }
     }

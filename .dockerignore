@@ -1,0 +1,52 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentação
+*.md
+!README.md
+docs/
+
+# Scripts de deploy
+deploy.sh
+cloudbuild.yaml
+
+# Secrets e configurações locais
+*.json
+*.pem
+*.key
+.env
+.env.local
+
+# Testes e relatórios
+*.log
+coverage/
+.nyc_output/
+
+# Docker
+Dockerfile*
+.dockerignore
+docker-compose.yml
+
+# Outros
+node_modules/
+.npm
+

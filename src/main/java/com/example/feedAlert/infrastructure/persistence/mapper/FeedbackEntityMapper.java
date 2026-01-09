@@ -75,6 +75,7 @@ public class FeedbackEntityMapper {
             .userId(entity.getUserId())
             .name(new User.Name(entity.getName()))
             .email(new User.Email(entity.getEmail()))
+            .password(entity.getPassword() != null ? new User.Password(entity.getPassword()) : null)
             .role(toRoleDomain(entity.getRole()))
             .createdAt(entity.getCreatedAt())
             .build();
@@ -88,6 +89,7 @@ public class FeedbackEntityMapper {
             .userId(domain.getUserId())
             .name(domain.getName() != null ? domain.getName().value() : null)
             .email(domain.getEmail() != null ? domain.getEmail().value() : null)
+            .password(domain.getPassword() != null ? domain.getPassword().value() : null)
             .role(toRoleEntity(domain.getRole()))
             .createdAt(domain.getCreatedAt())
             .build();

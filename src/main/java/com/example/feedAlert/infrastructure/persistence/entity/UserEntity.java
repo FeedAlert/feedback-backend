@@ -18,6 +18,9 @@ public class UserEntity {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
@@ -28,10 +31,11 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long userId, String name, String email, RoleEntity role, Instant createdAt) {
+    public UserEntity(Long userId, String name, String email, String password, RoleEntity role, Instant createdAt) {
         this.userId = userId;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.role = role;
         this.createdAt = createdAt;
     }
@@ -65,6 +69,14 @@ public class UserEntity {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public RoleEntity getRole() {
         return role;
     }
@@ -89,6 +101,7 @@ public class UserEntity {
         private Long userId;
         private String name;
         private String email;
+        private String password;
         private RoleEntity role;
         private Instant createdAt;
 
@@ -107,6 +120,11 @@ public class UserEntity {
             return this;
         }
 
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
         public Builder role(RoleEntity role) {
             this.role = role;
             return this;
@@ -118,7 +136,7 @@ public class UserEntity {
         }
 
         public UserEntity build() {
-            return new UserEntity(userId, name, email, role, createdAt);
+            return new UserEntity(userId, name, email, password, role, createdAt);
         }
     }
 }
